@@ -13,6 +13,8 @@
 		5DEB414D23829E420097C3F3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5DEB414B23829E420097C3F3 /* Main.storyboard */; };
 		5DEB414F23829E430097C3F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5DEB414E23829E430097C3F3 /* Assets.xcassets */; };
 		5DEB415223829E430097C3F3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5DEB415023829E430097C3F3 /* LaunchScreen.storyboard */; };
+		5DEB4168238412DC0097C3F3 /* RssParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DEB4167238412DC0097C3F3 /* RssParser.swift */; };
+		5DEB416A2384132F0097C3F3 /* News.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DEB41692384132F0097C3F3 /* News.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,8 @@
 		5DEB414E23829E430097C3F3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5DEB415123829E430097C3F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5DEB415323829E430097C3F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5DEB4167238412DC0097C3F3 /* RssParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RssParser.swift; sourceTree = "<group>"; };
+		5DEB41692384132F0097C3F3 /* News.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = News.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +60,7 @@
 		5DEB414423829E420097C3F3 /* RSS Reader */ = {
 			isa = PBXGroup;
 			children = (
+				5DEB4166238412C40097C3F3 /* Models */,
 				5DEB415C2382A05E0097C3F3 /* Controllers */,
 				5DEB415A2382A0330097C3F3 /* Storyboards */,
 				5DEB41592382A0260097C3F3 /* Resources */,
@@ -97,6 +102,15 @@
 				5DEB414923829E420097C3F3 /* NewsTableViewController.swift */,
 			);
 			path = Controllers;
+			sourceTree = "<group>";
+		};
+		5DEB4166238412C40097C3F3 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				5DEB41692384132F0097C3F3 /* News.swift */,
+				5DEB4167238412DC0097C3F3 /* RssParser.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -171,7 +185,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				5DEB414A23829E420097C3F3 /* NewsTableViewController.swift in Sources */,
+				5DEB4168238412DC0097C3F3 /* RssParser.swift in Sources */,
 				5DEB414623829E420097C3F3 /* AppDelegate.swift in Sources */,
+				5DEB416A2384132F0097C3F3 /* News.swift in Sources */,
 				5DEB414823829E420097C3F3 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
