@@ -6,9 +6,9 @@
 //  Copyright © 2019 Sergey Bizunov. All rights reserved.
 //
 
-import Foundation
-
-struct News {
+struct Post {
     var title: String
-    var description: String
+    var date: String
+    var postUrl: String
+    var imageUrl: String?
 }

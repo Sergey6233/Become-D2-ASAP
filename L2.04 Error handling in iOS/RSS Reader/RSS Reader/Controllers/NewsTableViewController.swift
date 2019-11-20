@@ -14,9 +14,9 @@ class NewsTableViewController: UITableViewController {
         static let grodnoRssUrlPath = "https://news.tut.by/rss/geonews/grodno.rss"
     }
 
-    private var parser: RssParser?
+    private var parser: RSSParser?
 
-    private var rssItems = [String]()
+    private var posts = [String]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,7 +28,7 @@ class NewsTableViewController: UITableViewController {
     }
 
     private func setupParser() {
-        parser = RssParser(urlPath: Constants.grodnoRssUrlPath)
+        parser = RSSParser(urlPath: Constants.grodnoRssUrlPath)
         parser?.delegate = self
         DispatchQueue.global(qos: .userInteractive).async { [weak self] in
             self?.parser?.parse()
@@ -36,13 +36,19 @@ class NewsTableViewController: UITableViewController {
     }
 }
 
-extension NewsTableViewController: RssParserDelegate {
-    func updateNews(_ news: String) {
-        print("News update result: \(news)")
+extension NewsTableViewController: RSSParserDelegate {
+
+    func updatePosts(_ posts: [Post]) {
+        print("Found \(posts.count) posts")
     }
 
-
-    func parserError() {
-        print("⚠️ Error during parsing")
+    func parserError(_ error: RSSParserError) {
+        switch error {
+        case .invalidUrl:
+            // TODO
+            break
+        case .nativeXMLParserError(let nativeError):
+            print("⚠️ [Native XMLParser Error] description: \(nativeError.localizedDescription)")
+        }
     }
 }
