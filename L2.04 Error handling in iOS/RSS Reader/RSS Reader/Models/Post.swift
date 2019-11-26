@@ -7,8 +7,8 @@
 //
 
 struct Post {
-    var title: String
-    var date: String
-    var postUrl: String
+    var title: String?
+    var date: String?
+    var postUrl: String?
     var imageUrl: String?
 }

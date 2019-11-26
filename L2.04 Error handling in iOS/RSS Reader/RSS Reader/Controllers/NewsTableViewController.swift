@@ -16,15 +16,22 @@ class NewsTableViewController: UITableViewController {
 
     private var parser: RSSParser?
 
-    private var posts = [String]()
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    private var posts = [Post]() {
+        didSet {
+            DispatchQueue.main.async { [weak self] in
+                self?.tableView.reloadData()
+            }
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupParser()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        parser = nil
     }
 
     private func setupParser() {
@@ -34,21 +41,37 @@ class NewsTableViewController: UITableViewController {
             self?.parser?.parse()
         }
     }
+
+    // MARK: - UITableViewDataSource
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return posts.count
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCell.reuseIdentifier, for: indexPath) as? NewsTableViewCell else {
+            assertionFailure("WARNING: Needs to fix the NewsTableViewCell !")
+            return UITableViewCell()
+        }
+        cell.post = posts[indexPath.row]
+        return cell
+    }
 }
+
+// MARK: - RSSParserDelegate
 
 extension NewsTableViewController: RSSParserDelegate {
 
     func updatePosts(_ posts: [Post]) {
-        print("Found \(posts.count) posts")
+        self.posts = posts
     }
 
     func parserError(_ error: RSSParserError) {
         switch error {
         case .invalidUrl:
-            // TODO
-            break
+            print("⚠️ [RSSParser Error] description: invalid URL!")
         case .nativeXMLParserError(let nativeError):
-            print("⚠️ [Native XMLParser Error] description: \(nativeError.localizedDescription)")
+            print("⚠️ [Native XMLParser Error] description: \(nativeError.localizedDescription)!")
         }
     }
 }
