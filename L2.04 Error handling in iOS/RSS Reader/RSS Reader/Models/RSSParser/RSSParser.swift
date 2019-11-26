@@ -10,10 +10,16 @@ import Foundation
 
 protocol RSSParserDelegate: class {
     func updatePosts(_ posts: [Post])
+    func updateProgress(_ progress: Int, isUpdateToMaxProgress: Bool)
     func parserError(_ error: RSSParserError)
 }
 
 class RSSParser: NSObject {
+
+    private struct Constants {
+        static let minProgress = 0
+        static let maxProgress = 100
+    }
 
     private enum XMLParam: String {
         case item
@@ -38,6 +44,17 @@ class RSSParser: NSObject {
 
     private var posts: [Post]?
 
+    private var progress: Int = 0 {
+        didSet {
+            if oldValue != progress {
+                let isMaxProgress = progress == Constants.maxProgress ? true : false
+                delegate?.updateProgress(progress, isUpdateToMaxProgress: isMaxProgress)
+            }
+        }
+    }
+
+    private var totalLines = 0
+
     private var postsTitles: [String] {
         guard let posts = posts else {
             return []
@@ -52,16 +69,30 @@ class RSSParser: NSObject {
         posts = []
     }
 
-    // MARK: - Methods
+    // MARK: - Base Logic
 
     func parse() {
         guard let url = URL(string: urlPath), let xmlParser = XMLParser(contentsOf: url) else {
             delegate?.parserError(.invalidUrl)
             return
         }
+
+        // Lines in the XML body
+        if let data = try? String(contentsOf: url, encoding: .utf8) {
+            totalLines = data.components(separatedBy: .newlines).count
+        }
+
         parser = xmlParser
         parser?.delegate = self
         parser?.parse()
+    }
+
+    // MARK: - Progress
+
+    private func updateProgress(for line: Int, isUpdateToMaxProgress: Bool = false) {
+        let maxProgress = isUpdateToMaxProgress ? Constants.maxProgress : Constants.minProgress
+        let progress = Int((Double(line) / Double(totalLines) * 100)/*.rounded(.up)*/)
+        self.progress = max(progress, maxProgress)
     }
 }
 
@@ -70,6 +101,8 @@ class RSSParser: NSObject {
 extension RSSParser: XMLParserDelegate {
 
     func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
+
+        updateProgress(for: parser.lineNumber)
 
         tempElement = elementName
         if elementName == XMLParam.item.rawValue {
@@ -122,6 +155,7 @@ extension RSSParser: XMLParserDelegate {
     }
 
     func parserDidEndDocument(_ parser: XMLParser) {
+        updateProgress(for: 0, isUpdateToMaxProgress: true)
         guard let posts = posts else {
             delegate?.updatePosts([])
             return

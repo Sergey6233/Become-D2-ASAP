@@ -66,6 +66,13 @@ extension NewsTableViewController: RSSParserDelegate {
         self.posts = posts
     }
 
+    func updateProgress(_ progress: Int, isUpdateToMaxProgress: Bool) {
+        DispatchQueue.main.async { [weak self] in
+            self?.navigationItem.title = isUpdateToMaxProgress ? nil : "\(progress) %"
+        }
+        print(">> [News Controller] progress: \(progress)")
+    }
+
     func parserError(_ error: RSSParserError) {
         switch error {
         case .invalidUrl:

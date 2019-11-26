@@ -22,6 +22,7 @@ class NewsTableViewCell: UITableViewCell, ReuseIdentifierSupportable {
     }
 
     override func prepareForReuse() {
+        super.prepareForReuse()
         postTitle.text = nil
         postDetails.text = nil
         postDate.text = nil
@@ -30,15 +31,17 @@ class NewsTableViewCell: UITableViewCell, ReuseIdentifierSupportable {
 
     private func setup() {
         guard let post = post else {
-            // prepareForReuse()
+            prepareForReuse()
             return
         }
+
         postTitle.text = post.title
-        postDetails.text = nil      // TODO
+        postDetails.text = nil // TODO
         postDate.text = post.date
         guard let imageUrl = post.imageUrl, let url = URL(string: imageUrl) else {
             return
         }
+
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             if let imageData = try? Data(contentsOf: url) {
                 DispatchQueue.main.async {
